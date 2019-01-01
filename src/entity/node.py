@@ -86,3 +86,8 @@ def __append_accessible_node(nodes, id_nodes):
                 id_nodes.append(edge)
                 __append_accessible_node(nodes, id_nodes)
     return id_nodes
+
+def initialize_edges(nodes, arrows):
+    """Analyze arrows id for create edges
+    for each nodes"""
+    for arrow in arrows: nodes[arrow.id_arrow[0]].set_edges(arrow.id_arrow[1])

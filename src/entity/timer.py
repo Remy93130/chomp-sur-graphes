@@ -22,6 +22,8 @@ class Timer(Thread):
             self.max_time -= 1
         self.end_of_thread.set()
 
+# Functions -------------------------------------------------------------------
+
 def main():
     """Main for test the class"""
     end_of_thread = Event()

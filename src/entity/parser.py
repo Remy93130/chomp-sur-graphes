@@ -1,8 +1,14 @@
 """Module for parse svg file and return the
 position of different elements"""
 
+# Global variables ------------------------------------------------------------
+
+GRAPH_PATH = "./ressources/graphes/"
+
 # Imports ---------------------------------------------------------------------
 
+import os
+import random
 import xml.etree.ElementTree as ET
 from .node import Node, Arrow
 
@@ -11,8 +17,8 @@ from .node import Node, Arrow
 class Parser:
     """Class for get node's and arrow's coordinates
     Also give the minimum size for the canvas"""
-    def __init__(self, path):
-        self.path = path
+    def __init__(self, path=None):
+        self.__select_file(path)
         self.parser = ET.parse(self.path)
         self.root = self.parser.getroot()
 
@@ -86,3 +92,15 @@ class Parser:
         for node in nodes:
             dic[node.id_node] = node
         return dic
+
+    def __select_file(self, file):
+        """Select the file to parse data in other word select 
+        the graph for play if None select a random file"""
+        files = os.listdir(GRAPH_PATH)
+        selected = str()
+        if not file:
+            selected = GRAPH_PATH + random.choice(files)
+        else:
+            assert file in files
+            selected = GRAPH_PATH + file
+        self.path = selected

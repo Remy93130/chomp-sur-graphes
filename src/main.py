@@ -2,30 +2,51 @@
 # -*- coding: utf8 -*-
 """The main file for execute the project"""
 
+# Global variables ------------------------------------------------------------
+
+ARGS = None
+
 # Imports ---------------------------------------------------------------------
 
 # import sys
 # import os
+import argparse
 
 import entity.parser as _parser
-from entity.node import delete_node
+import entity.node as node
+import entity.option as settings
 
 # Functions -------------------------------------------------------------------
 
-def create_edges(nodes, arrows):
-    for arrow in arrows:
-        nodes[arrow.id_arrow[0]].set_edges(arrow.id_arrow[1])
+def manage_argv():
+    global ARGS
+    """Check argument given to the program"""
+    argp = argparse.ArgumentParser()
+    argp.add_argument("-nolog", help="Desactive les logs", action="store_true")
+    argp.add_argument("-dev",   help="Logs dans la console", action="store_true")
+    ARGS = argp.parse_args()
+
+def setup():
+    if ARGS.dev:
+        settings.logs_output("console")
+    elif ARGS.nolog:
+        settings.logs_output(False)
+    else:
+        settings.logs_output("file")
 
 def main():
     try:
-        parser = _parser.Parser('./ressources/1.gv.svg')
+        parser = _parser.Parser()
     except FileNotFoundError as exception:
         print("Erreur lors du parsage, lancer le programme depuis le dossier principal")
         raise exception
 
     nodes = parser.get_nodes()
     arrows = parser.get_arrows()
-    create_edges(nodes, arrows)
+    node.initialize_edges(nodes, arrows)
+    print(nodes)
 
 if __name__ == '__main__':
+    manage_argv()
+    setup()
     main()
