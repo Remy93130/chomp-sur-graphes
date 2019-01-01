@@ -1,7 +1,11 @@
 """Module for manage the time in the game"""
 
+# Imports ---------------------------------------------------------------------
+
 from threading import Thread, Event
 import time
+
+# Classes ---------------------------------------------------------------------
 
 class Timer(Thread):
     """Class for create a coutdown during the game"""
@@ -31,7 +35,6 @@ def main():
         time.sleep(.5)
     print("FINISH")
     print("Total execution time : {} seconds".format(time.time() - time_begin))
-
 
 if __name__ == '__main__':
     main()

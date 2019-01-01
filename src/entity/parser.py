@@ -1,7 +1,12 @@
 """Module for parse svg file and return the
 position of different elements"""
 
+# Imports ---------------------------------------------------------------------
+
 import xml.etree.ElementTree as ET
+from .node import Node, Arrow
+
+# Classes ---------------------------------------------------------------------
 
 class Parser:
     """Class for get node's and arrow's coordinates
@@ -31,10 +36,11 @@ class Parser:
                         else:
                             poisoned = True
                         nodes.append(
-                            Node(float(element.attrib['cx']),
-                                 float(element.attrib['cy']) * -1,
-                                 current_name, poisoned))
-        return nodes
+                            Node(current_name,
+                                 poisoned,
+                                 (float(element.attrib['cx']),
+                                  float(element.attrib['cy']) * -1)))
+        return self.__create_dico(nodes)
 
     def get_arrows(self):
         """Return all edges in the svg file"""
@@ -52,7 +58,7 @@ class Parser:
                         coord_lines[0] = coord_lines[0].replace('M', '')
                         coord_lines = coord_lines[::3]
                         for points in coord_lines:
-                            points = points.split('')
+                            points = points.split(',')
                             for point in points:
                                 current_points_line.append(point)
                     elif 'polygon' in element.tag:
@@ -68,7 +74,15 @@ class Parser:
         """Convert negative number for avoid weird result on render"""
         for i, value in enumerate(line):
             if float(value) < 0:
-                line[i] = self.get_graph_size - (-1 * float(value))
+                line[i] = self.get_graph_size() - (-1 * float(value))
         for i, value in enumerate(sting):
             if float(value) < 0:
-                sting[i] = self.get_graph_size - (-1 * float(value))
+                sting[i] = self.get_graph_size() - (-1 * float(value))
+
+    def __create_dico(self, nodes):
+        """Convert the nodes list to a dictionary for improve the
+        complexity of the program"""
+        dic = dict()
+        for node in nodes:
+            dic[node.id_node] = node
+        return dic
