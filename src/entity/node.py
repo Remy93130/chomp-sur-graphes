@@ -71,9 +71,9 @@ class Arrow():
 def delete_node(nodes, id_node_to_delete):
     """Get the nodes dict and the node to delete and
     the other accessible node from him and return the new dict"""
-    accessible_nodes = __append_accessible_node(nodes, list(id_node_to_delete))
+    accessible_nodes = __append_accessible_node(nodes, [id_node_to_delete])
     for id_node in accessible_nodes:
-        del nodes[id_node]
+        del nodes[str(id_node)]
     for node in nodes.values():
         for id_node in accessible_nodes:
             if id_node in node.edges:
@@ -81,7 +81,7 @@ def delete_node(nodes, id_node_to_delete):
 
 def __append_accessible_node(nodes, id_nodes):
     for id_node in id_nodes:
-        for edge in nodes[id_node].edges:
+        for edge in nodes[str(id_node)].edges:
             if edge not in id_nodes:
                 id_nodes.append(edge)
                 __append_accessible_node(nodes, id_nodes)
@@ -90,4 +90,5 @@ def __append_accessible_node(nodes, id_nodes):
 def initialize_edges(nodes, arrows):
     """Analyze arrows id for create edges
     for each nodes"""
-    for arrow in arrows: nodes[arrow.id_arrow[0]].set_edges(arrow.id_arrow[1])
+    for arrow in arrows:
+        nodes[arrow.id_arrow[0]].set_edges(arrow.id_arrow[1])

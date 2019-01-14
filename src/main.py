@@ -45,6 +45,9 @@ def main():
     arrows = parser.get_arrows()
     node.initialize_edges(nodes, arrows)
     print(nodes)
+    print('--------')
+    node.delete_node(nodes, 11)
+    print(nodes)
 
 if __name__ == '__main__':
     manage_argv()
