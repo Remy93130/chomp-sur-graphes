@@ -49,7 +49,7 @@ class Condition:
 	def loop(self):
 		if(self.gui.actual == "game" or self.gui.actual == "gameIA"): #view if we are in a party 
 			if(self.timer.run() == "done"): #view if the timer is done, 
-				return loose(self.gui,game.turn)
+				return loose(self.gui,self.game.turn)
 			return self.gui.screen.after(100, self.loop)
 		else: #if not, we leave this loop
 			return
