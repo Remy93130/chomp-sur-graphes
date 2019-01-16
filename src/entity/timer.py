@@ -2,41 +2,28 @@
 
 # Imports ---------------------------------------------------------------------
 
-from threading import Thread, Event
-import time
+import time as t
 
 # Classes ---------------------------------------------------------------------
 
-class Timer(Thread):
-    """Class for create a coutdown during the game"""
-    def __init__(self, max_time, end_of_thread):
-        Thread.__init__(self)
-        self.max_time = max_time
-        self.end_of_thread = end_of_thread
+class Timer:
+	"""Class for create a coutdown during the game"""
+	def __init__(self, gui, location, max_time):
+		self.gui = gui
+		self.begin = t.time()
+		self.location = location
+		self.max_time = max_time*60
 
-    def run(self):
-        """Method for run the thread when the thread is
-        over the attribute end_of_thread is set"""
-        while self.max_time != 0:
-            time.sleep(1)
-            self.max_time -= 1
-        self.end_of_thread.set()
+	def run(self):
+		"""Method for run the timer"""
+		now = t.time() - self.begin
+		if(self.max_time-now < 0):
+			return "done"
+		min, sec = divmod(self.max_time-now, 60)
+		hou,min = divmod(min, 60)
+		time = "%d:%02d:%02d" % (hou, min, sec)
+		self.gui.canvas.itemconfigure(self.location, text=time)
+		self.gui.screen.after(1000, self.run)
 
 # Functions -------------------------------------------------------------------
 
-def main():
-    """Main for test the class"""
-    end_of_thread = Event()
-    end_of_thread.clear()
-    time_begin = time.time()
-    timer = Timer(5, end_of_thread)
-    timer.start()
-    print('START')
-    while not end_of_thread.is_set():
-        print("\tProcessing...\n\tmax_time = {}".format(timer.max_time))
-        time.sleep(.5)
-    print("FINISH")
-    print("Total execution time : {} seconds".format(time.time() - time_begin))
-
-if __name__ == '__main__':
-    main()

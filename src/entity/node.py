@@ -68,6 +68,16 @@ class Arrow():
 
 # Functions -------------------------------------------------------------------
 
+def noMorePoisonedNodes(nodes):
+	"""verif if there are no more poisoned nodes in the dict"""
+	noMore = True
+	for node in nodes.values():
+		if(node.poisoned):
+			noMore = False
+			break
+	return noMore
+	
+
 def delete_node(nodes, id_node_to_delete):
     """Get the nodes dict and the node to delete and
     the other accessible node from him and return the new dict"""

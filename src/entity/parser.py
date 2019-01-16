@@ -3,7 +3,7 @@ position of different elements"""
 
 # Global variables ------------------------------------------------------------
 
-GRAPH_PATH = "./ressources/graphes/"
+GRAPH_PATH = "../ressources/graphes/"
 
 # Imports ---------------------------------------------------------------------
 
@@ -17,17 +17,16 @@ from .node import Node, Arrow
 class Parser:
     """Class for get node's and arrow's coordinates
     Also give the minimum size for the canvas"""
-    def __init__(self, path=None):
+    def __init__(self,window, path=None):
         self.__select_file(path)
         self.parser = ET.parse(self.path)
         self.root = self.parser.getroot()
+        self.window_size = window
+        self.graph_width = self.root.attrib['width'].replace('pt', '')
+        self.graph_height = self.root.attrib['height'].replace('pt', '')
 
-    def get_graph_size(self):
-        """Return the size required for
-        create the graph"""
-        size = max(self.root.attrib['width'], self.root.attrib['height'])
-        return int(size.replace('pt', ''))
-
+	
+	
     def get_nodes(self):
         """Return all nodes in the svg file"""
         nodes = list()
@@ -80,10 +79,10 @@ class Parser:
         """Convert negative number for avoid weird result on render"""
         for i, value in enumerate(line):
             if float(value) < 0:
-                line[i] = self.get_graph_size() - (-1 * float(value))
+                line[i] = self.window_size - (-1 * float(value))
         for i, value in enumerate(sting):
             if float(value) < 0:
-                sting[i] = self.get_graph_size() - (-1 * float(value))
+                sting[i] = self.window_size - (-1 * float(value))
 
     def __create_dico(self, nodes):
         """Convert the nodes list to a dictionary for improve the
