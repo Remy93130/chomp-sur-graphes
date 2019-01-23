@@ -10,20 +10,57 @@ class Timer:
 	"""Class for create a coutdown during the game"""
 	def __init__(self, gui, location, max_time):
 		self.gui = gui
-		self.begin = t.time()
+		self.begin = 0
+		self.previous = 0
+		self.now = 0
 		self.location = location
-		self.max_time = max_time*60
+		self.max_time = max_time
+		self.IsStop = False 
+		self.isPause = True
+		self.showing = True
 
+	def hide(self):
+		
+		self.showing = False
+	
+	def show(self):
+		self.showing = True
+	
+	def start(self):
+		"""Method for launch or relaunch the timer"""
+		if(self.isPause):
+			self.begin = t.time()
+			self.isPause = False
+	
+	def stop(self):
+		self.IsStop = True
+	
+	def pause(self):
+		"""Method for stop the timer"""
+		if(self.isPause != True):
+			self.begin = 0
+			self.previous = self.now
+			self.isPause = True
+	
 	def run(self):
 		"""Method for run the timer"""
-		now = t.time() - self.begin
-		if(self.max_time-now < 0):
+		if(self.IsStop):
+			return 
+		if(self.begin == 0):
+			self.now = self.previous
+		else:
+			self.now = self.previous + t.time() - self.begin
+		if(self.max_time-self.now < 0):
 			return "done"
-		min, sec = divmod(self.max_time-now, 60)
+		min, sec = divmod(self.max_time-self.now, 60)
 		hou,min = divmod(min, 60)
-		time = "%d:%02d:%02d" % (hou, min, sec)
+		if(self.showing):
+			time = "%d:%02d:%02d" % (hou, min, sec)
+		else:
+			time =""
 		self.gui.canvas.itemconfigure(self.location, text=time)
 		self.gui.screen.after(1000, self.run)
+
 
 # Functions -------------------------------------------------------------------
 
