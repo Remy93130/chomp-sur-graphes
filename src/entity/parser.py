@@ -17,7 +17,7 @@ from .node import Node, Arrow
 class Parser:
     """Class for get node's and arrow's coordinates
     Also give the minimum size for the canvas"""
-    def __init__(self,window, path=None):
+    def __init__(self, window, path=None):
         self.__select_file(path)
         self.parser = ET.parse(self.path)
         self.root = self.parser.getroot()
@@ -76,7 +76,12 @@ class Parser:
         return arrows
 
     def __formalize_number(self, line, sting):
-        """Convert negative number for avoid weird result on render"""
+        """Convert negative number for avoid weird result on render
+        
+        Arguments:
+            line {List} -- list of point for line
+            sting {List} -- list of point for sting
+        """
         for i, value in enumerate(line):
             if float(value) < 0:
                 line[i] = self.window_size - (-1 * float(value))
@@ -86,7 +91,14 @@ class Parser:
 
     def __create_dico(self, nodes):
         """Convert the nodes list to a dictionary for improve the
-        complexity of the program"""
+        complexity of the program
+        
+        Arguments:
+            nodes {List} -- The list to convert
+        
+        Returns:
+            Dict -- The dictionary
+        """
         dic = dict()
         for node in nodes:
             dic[node.id_node] = node
@@ -94,7 +106,11 @@ class Parser:
 
     def __select_file(self, file):
         """Select the file to parse data in other word select 
-        the graph for play if None select a random file"""
+        the graph for play if None select a random file
+        
+        Arguments:
+            file {string} -- the name of the file
+        """
         files = os.listdir(GRAPH_PATH)
         selected = str()
         if not file:

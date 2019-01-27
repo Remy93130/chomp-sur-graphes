@@ -22,7 +22,11 @@ class Node():
 
     def set_edges(self, edge):
         """Creates differents edges for
-        the node"""
+        the node
+        
+        Arguments:
+            edge {str} -- The id of the node
+        """
         self.edges.append(edge)
 
     def __repr__(self):
@@ -69,7 +73,14 @@ class Arrow():
 # Functions -------------------------------------------------------------------
 
 def noMorePoisonedNodes(nodes):
-	"""verif if there are no more poisoned nodes in the dict"""
+	"""Check if there are no more poisoned nodes in the dict
+    
+    Arguments:
+        nodes {Dict} -- The nodes dictionnary
+    
+    Returns:
+        bool -- Boolean to check if still poisoned node
+    """
 	noMore = True
 	for node in nodes.values():
 		if(node.poisoned):
@@ -80,7 +91,12 @@ def noMorePoisonedNodes(nodes):
 
 def delete_node(nodes, id_node_to_delete):
     """Get the nodes dict and the node to delete and
-    the other accessible node from him and return the new dict"""
+    the other accessible node from him and return the new dict
+    
+    Arguments:
+        nodes {Dict} -- The node's dictionary
+        id_node_to_delete {str} -- The id of the node to delete
+    """
     accessible_nodes = __append_accessible_node(nodes, [id_node_to_delete])
     for id_node in accessible_nodes:
         del nodes[str(id_node)]
@@ -90,6 +106,16 @@ def delete_node(nodes, id_node_to_delete):
                 node.edges.remove(id_node)
 
 def __append_accessible_node(nodes, id_nodes):
+    """Append to the list id_nodes all node to delete
+    Recursive function
+    
+    Arguments:
+        nodes {Dict} -- The node's dictionary
+        id_nodes {int} -- The id to the node of delete
+    
+    Returns:
+        List -- List of node id to delete
+    """
     for id_node in id_nodes:
         for edge in nodes[str(id_node)].edges:
             if edge not in id_nodes:
@@ -99,6 +125,11 @@ def __append_accessible_node(nodes, id_nodes):
 
 def initialize_edges(nodes, arrows):
     """Analyze arrows id for create edges
-    for each nodes"""
+    for each nodes
+    
+    Arguments:
+        nodes {Dict} -- The node's dictionary
+        arrows {List} -- The list of arrows
+    """
     for arrow in arrows:
         nodes[arrow.id_arrow[0]].set_edges(arrow.id_arrow[1])

@@ -3,7 +3,7 @@
 
 from tkinter import *
 from tkinter import font as tkFont
-from aggdraw import *
+# from aggdraw import *
 
 class GUI:
 	def __init__(self, width,height):
