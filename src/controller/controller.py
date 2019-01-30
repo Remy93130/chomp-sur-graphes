@@ -7,7 +7,7 @@
 global height
 height = 900
 global width
-width =  height
+width =  900
 
 # Imports ---------------------------------------------------------------------
 
@@ -158,9 +158,6 @@ def launchGame(gui):
             gui.drawTimeRest(game.turn)
         gui.canvas.tag_bind("_"+node.id_node+"_",'<Button-1>', auxDelNode) # define all event
 
-def printcoord(evt):
-    print("x: ",evt.x,"; y: ",evt.y)
-
 def launchMenu(gui):
     """ This function launch the menu of the game"""
     gui.actual = "menu"
@@ -182,9 +179,12 @@ def launchMenu(gui):
     gui.canvas.tag_bind("option",'<Button-1>',printcoord)
     gui.canvas.tag_bind("about",'<Button-1>',printcoord)
     gui.canvas.tag_bind("rules",'<Button-1>',auxRules)
+	
+def printcoord(evt):
+    print("x: ",evt.x,"; y: ",evt.y)
 
 def controller():
     """ This function start the tkinter interface and the home of the game"""
-    Interface = GUI(height,width) 
+    Interface = GUI(width,height) 
     launchMenu(Interface)
-    Interface.launchGUI() # This active the tker threadint
+    Interface.launchGUI() # This active the tkinter thread
