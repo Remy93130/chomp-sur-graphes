@@ -9,6 +9,8 @@ height = 900
 global width
 width =  height
 
+CHOICE = "2" + ".gv.svg"
+
 # Imports ---------------------------------------------------------------------
 
 from view.GUI import *
@@ -85,7 +87,7 @@ def launchGameIA(gui):
     """ This function launch a party vs IA"""
     gui.actual = "gameIA"
     gui.canvas.delete("all")
-    graph = Parser(height, "1.gv.svg")
+    graph = Parser(height, CHOICE)
     gui.setGraphDimensions(graph.graph_width,graph.graph_height)
     gui.setNodes(graph.get_nodes())
     gui.setArrows(graph.get_arrows())
@@ -130,7 +132,7 @@ def launchGame(gui):
     """ This function launch a party"""
     gui.actual = "game"
     gui.canvas.delete("all")
-    graph = Parser(height, "1.gv.svg")
+    graph = Parser(height, CHOICE)
     gui.setGraphDimensions(graph.graph_width,graph.graph_height)
     gui.setNodes(graph.get_nodes())
     gui.setArrows(graph.get_arrows())
