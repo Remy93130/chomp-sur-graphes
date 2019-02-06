@@ -25,7 +25,9 @@ class GUI:
 				if(i%2==0):
 					arrow.points_sting[i] = float(arrow.points_sting[i])*(self.graph_width/self.ogw)+self.width/2-self.graph_width*0.49
 				else:
-					arrow.points_sting[i] = float(arrow.points_sting[i])*(self.graph_height/self.ogh)-self.height+self.graph_height+self.height/6+self.difHeight
+					print("y du point avant:",arrow.points_sting[i])
+					arrow.points_sting[i] = self.height-(self.height-float(arrow.points_sting[i]))*(self.graph_height/self.ogh)-(self.height-self.graph_height-self.height*0.166)
+					print("y du point mtn: ",arrow.points_sting[i])
 		self.arrows = arrows
 		
 	
@@ -33,18 +35,15 @@ class GUI:
 		self.nodes = nodes
 	
 	def setGraphDimensions(self,width,height):
-		print("height :",self.height)
 		self.graph_height = int(height)
 		self.graph_width = int(width)
-		print("graph height:", self.graph_height)
 		self.ogw = self.graph_width
 		self.ogh = self.graph_height
-		self.difHeight = 0
 		if(self.width < self.graph_width):
 			self.graph_width = self.width*0.75
-		if(self.height-50 < self.graph_height):
+		if(self.height-100 < self.graph_height):
 			self.graph_height = self.height*0.75
-			self.difHeight = 0
+
 	def drawLoose(self,player):
 		looseFont = tkFont.Font(family='Arial', size=int(self.height*0.0400), weight='bold')
 		ariaRespon = tkFont.Font(family='Arial', size=int(self.height*0.0142), weight='bold')
@@ -69,8 +68,8 @@ class GUI:
 			color = 'lightblue'
 		else:
 			color = 'white'
-		self.canvas.create_oval(node.coord[0]*(self.graph_width/self.ogw) +self.width/2-self.graph_width*0.49 -27, self.graph_height+self.height/6 - node.coord[1]*(self.graph_height/self.ogh)-18, node.coord[0]*(self.graph_width/self.ogw) +self.width/2-self.graph_width*0.49 +27, self.graph_height+self.height/6 - node.coord[1]*(self.graph_height/self.ogh)+18,tag=("_"+node.id_node+"_","graph"),fill=color,width=1.5)
-		self.canvas.create_text(node.coord[0]*(self.graph_width/self.ogw) +self.width/2-self.graph_width*0.49 , self.graph_height+self.height/6 - node.coord[1]*(self.graph_height/self.ogh), text=node.id_node,tag=("_"+node.id_node+"_","graph"))
+		self.canvas.create_oval(node.coord[0]*(self.graph_width/self.ogw)-27+self.width/2-self.graph_width*0.49, self.height-node.coord[1]*(self.graph_height/self.ogh)-18-(self.height-self.graph_height-self.height*0.166), node.coord[0]*(self.graph_width/self.ogw)+27+self.width/2-self.graph_width*0.49,self.height-node.coord[1]*(self.graph_height/self.ogh)+18-(self.height-self.graph_height-self.height*0.166),tag=("_"+node.id_node+"_","graph"),fill=color,width=1.5)
+		self.canvas.create_text(node.coord[0]*(self.graph_width/self.ogw)+self.width/2-self.graph_width*0.49, self.height-node.coord[1]*(self.graph_height/self.ogh)-(self.height-self.graph_height-self.height*0.166), text=node.id_node,tag=("_"+node.id_node+"_","graph"))
 		
 	def delNode(self,node):
 		self.canvas.delete('_'+node.id_node+'_')
@@ -83,14 +82,16 @@ class GUI:
 	
 	def drawArrow(self,arrow):
 		if arrow.id_arrow[0] in self.nodes and arrow.id_arrow[1] in self.nodes:
-				self.canvas.create_line(float(arrow.points_line[0])*(self.graph_width/self.ogw)+self.width/2-self.graph_width*0.49, arrow.points_line[1]*(self.graph_height/self.ogh)-self.height+self.graph_height+self.height/6+self.difHeight, float(arrow.points_line[2])*(self.graph_width/self.ogw)+self.width/2-self.graph_width*0.49, arrow.points_line[3]*(self.graph_height/self.ogh)-self.height+self.graph_height+self.height/6+self.difHeight,tag="graph",width=2.5)
-				self.canvas.create_polygon(arrow.points_sting,tag="graph")
+				self.canvas.create_line(float(arrow.points_line[0])*(self.graph_width/self.ogw)+self.width/2-self.graph_width*0.49,self.height-(self.height-arrow.points_line[1])*(self.graph_height/self.ogh)-(self.height-self.graph_height-self.height*0.166), float(arrow.points_line[2])*(self.graph_width/self.ogw)+self.width/2-self.graph_width*0.49, self.height-(self.height-arrow.points_line[3])*(self.graph_height/self.ogh)-(self.height-self.graph_height-self.height*0.166),tag="graph",width=0.5)
+				self.canvas.create_polygon(arrow.points_sting,tag="graph",width=2.5)
 		
 	def drawArrows(self):
+		print(self.arrows)
 		for arrow in self.arrows:
 			self.drawArrow(arrow)
 	def drawNodes(self):
-		#self.canvas.create_rectangle(self.width/2-self.graph_width*0.49, self.height/6, self.width/2+self.graph_width-self.graph_width*0.49, self.height/6+self.graph_height,outline='black',width=1)
+		print(self.nodes.values())
+		self.canvas.create_rectangle(self.width/2-self.graph_width*0.49, self.height*0.166, self.width/2+self.graph_width-self.graph_width*0.49, self.height*0.166+self.graph_height,outline='black',width=1)
 		for node in self.nodes.values():
 			self.drawNode(node)
 			
@@ -98,14 +99,16 @@ class GUI:
 		self.canvas.create_rectangle(self.width*0.411, self.height*0.066, self.width*0.611, self.height*0.094,outline='white',fill='white',width=0,tag=tag)
 	
 	def drawMenu(self):
+		describeFont = tkFont.Font(family='Arial', size=int(self.height*0.018))
+		self.canvas.create_text(self.width*0.65, self.height*0.380,font=describeFont,tag="winDescription",anchor="nw")
 		titleFont = tkFont.Font(family='Arial', size=int(self.height*0.0442), weight='bold')
 		self.canvas.create_text(self.width*0.50, self.height*0.12, text="Le Chomp sur Graphe",tag="title",font=titleFont)
 		ariaRespon = tkFont.Font(family='Arial', size=int(self.height*0.0142), weight='bold')
-		self.canvas.create_rectangle(self.width*0.393, self.height*0.214, self.width*0.607, self.height*0.321,outline='black',fill='white',activefill='grey',width=1,tag='1joueur')
-		self.canvas.create_rectangle(self.width*0.393, self.height*0.393, self.width*0.607, self.height*0.5,outline='black',fill='white',activefill='grey',width=1,tag='2joueur')
-		self.canvas.create_rectangle(self.width*0.393, self.height*0.571, self.width*0.607, self.height*0.678,outline='black',fill='white',activefill='grey',width=1,tag='option')
-		self.canvas.create_rectangle(self.width*0.393, self.height*0.75, self.width*0.607, self.height*0.857,outline='black',fill='white',activefill='grey',width=1,tag='about')
-		self.canvas.create_rectangle(self.width*0.642, self.height*0.235, self.width*0.771, self.height*0.3,outline='black',fill='white',activefill='grey',width=1,tag='rules')
+		self.canvas.create_rectangle(self.width*0.393, self.height*0.214, self.width*0.607, self.height*0.321,outline='black',fill='white',activefill='grey',width=1,tag=('1joueur','buttonChoice'))
+		self.canvas.create_rectangle(self.width*0.393, self.height*0.393, self.width*0.607, self.height*0.5,outline='black',fill='white',activefill='grey',width=1,tag=('2joueur','buttonChoice'))
+		self.canvas.create_rectangle(self.width*0.393, self.height*0.571, self.width*0.607, self.height*0.678,outline='black',fill='white',activefill='grey',width=1,tag=('option','buttonChoice'))
+		self.canvas.create_rectangle(self.width*0.393, self.height*0.75, self.width*0.607, self.height*0.857,outline='black',fill='white',activefill='grey',width=1,tag=('about','buttonChoice'))
+		self.canvas.create_rectangle(self.width*0.642, self.height*0.235, self.width*0.771, self.height*0.3,outline='black',fill='white',activefill='grey',width=1,tag=('rules','buttonChoice'))
 		self.canvas.create_text(self.width*0.5, self.height*0.271, text="1 Joueur",tag="1joueur",font=ariaRespon)
 		self.canvas.create_text(self.width*0.5, self.height*0.45, text="2 Joueurs",tag="2joueur",font=ariaRespon)
 		self.canvas.create_text(self.width*0.5, self.height*0.628, text="Options",tag="option",font=ariaRespon)
@@ -120,7 +123,11 @@ class GUI:
 		self.canvas.create_rectangle(self.height*0.016,self.height*0.016,self.height*0.116,self.height*0.072,tag="returnM",fill="white",activefill="grey")
 		self.canvas.create_text(self.height*0.064,self.height*0.044,text="Menu",activefill="grey",font=describeFont,tag="returnM")
 		
-		
+	
+	def showDescription(self,text):
+		self.canvas.itemconfigure("winDescription",text=text)
+
+	
 	def launchGUI(self):
 		self.canvas.pack()
 		self.screen.mainloop()
