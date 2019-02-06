@@ -5,9 +5,9 @@
 # Global variables ------------------------------------------------------------
 
 global height
-height = 900
+height = 700
 global width
-width =  900
+width =  700
 
 # Imports ---------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ def launchGameIA(gui):
     gui.drawArrows()
     gui.drawNodes()
     gui.drawTurn(game)
-    timer = Timer(gui, gui.drawTimer(),60) #start the timer, gui is Interface, gui.drawTimer() a function
+    timer = Timer(gui, gui.drawTimer(),600000) #start the timer, gui is Interface, gui.drawTimer() a function
                                           # for draw number of timer and the integer is minutes remaining
     gui.drawTimeRest(game.turn)
     condition = Condition(gui,timer,timer,game)
@@ -159,26 +159,44 @@ def launchGame(gui):
         gui.canvas.tag_bind("_"+node.id_node+"_",'<Button-1>', auxDelNode) # define all event
 
 def launchMenu(gui):
-    """ This function launch the menu of the game"""
-    gui.actual = "menu"
-    gui.canvas.delete("all")
-    gui.drawMenu()
-    gui.canvas.bind('<Button-1>',printcoord)
-    def auxGameIA(evt, gui = gui): #On Tkinter, you can't pass arguments if you call event function
-        return launchGameIA(gui)          #with a bind, so we use auxiliar function for pass our arguments
-    def auxGame(evt, gui = gui):
-        return launchGame(gui)
-    def auxOption(evt, gui = gui):
-        return launchGame(gui)
-    def auxAbout(evt, gui = gui):
-        return launchGame(gui)
-    def auxRules(evt, gui = gui):
-        return launchRules(gui)
-    gui.canvas.tag_bind("1joueur",'<Button-1>',auxGameIA)
-    gui.canvas.tag_bind("2joueur",'<Button-1>',auxGame)
-    gui.canvas.tag_bind("option",'<Button-1>',printcoord)
-    gui.canvas.tag_bind("about",'<Button-1>',printcoord)
-    gui.canvas.tag_bind("rules",'<Button-1>',auxRules)
+	""" This function launch the menu of the game"""
+	gui.actual = "menu"
+	gui.canvas.delete("all")
+	gui.drawMenu()
+	gui.canvas.bind('<Button-1>',printcoord)
+	def auxGameIA(evt, gui = gui): #On Tkinter, you can't pass arguments if you call event function
+		return launchGameIA(gui)          #with a bind, so we use auxiliar function for pass our arguments
+	def auxGame(evt, gui = gui):
+		return launchGame(gui)
+	def auxOption(evt, gui = gui):
+		return launchGame(gui)
+	def auxAbout(evt, gui = gui):
+		return launchGame(gui)
+	def auxRules(evt, gui = gui):
+		return launchRules(gui)
+	def noDescription(evt, gui = gui):
+		gui.showDescription("")
+	def description1J(evt, gui = gui):
+		gui.showDescription("Disputez une partie\ncontre l'ordinateur,\nla difficulté dépend\nde celle choisis\ndans les options.")
+	def description2J(evt, gui = gui):
+		gui.showDescription("Disputez une partie\ncontre un joueur,\nidéal pour un duel.")
+	def descriptionOp(evt, gui = gui):
+		gui.showDescription("Personnalisez le jeu\nou créez des graphs. ")
+	def descriptionAb(evt, gui = gui):
+		gui.showDescription("Affichez les crédits.")
+	def descriptionRu(evt, gui = gui):
+		gui.showDescription("Affichez les règles de ce jeu.")
+	gui.canvas.tag_bind("buttonChoice",'<Leave>',noDescription)
+	gui.canvas.tag_bind("1joueur",'<Button-1>',auxGameIA)
+	gui.canvas.tag_bind("1joueur",'<Motion>',description1J)
+	gui.canvas.tag_bind("2joueur",'<Button-1>',auxGame)
+	gui.canvas.tag_bind("2joueur",'<Motion>',description2J)
+	gui.canvas.tag_bind("option",'<Button-1>',printcoord)
+	gui.canvas.tag_bind("option",'<Motion>',descriptionOp)
+	gui.canvas.tag_bind("about",'<Button-1>',printcoord)
+	gui.canvas.tag_bind("about",'<Motion>',descriptionAb)
+	gui.canvas.tag_bind("rules",'<Button-1>',auxRules)
+	gui.canvas.tag_bind("rules",'<Motion>',descriptionRu)
 	
 def printcoord(evt):
     print("x: ",evt.x,"; y: ",evt.y)
