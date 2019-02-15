@@ -19,6 +19,7 @@ class Node():
         self.radius = (X_RADIUS, Y_RADIUS)
         self.label = Y_LABEL
         self.edges = list()
+        self.coaccess = list()
 
     def set_edges(self, edge):
         """Creates differents edges for
@@ -29,9 +30,18 @@ class Node():
         """
         self.edges.append(edge)
 
+    def set_coaccess(self, edge):
+        """Creates differents coaccessibles edges for
+        the node
+        
+        Arguments:
+            edge {str} -- The id of the node
+        """
+        self.coaccess.append(edge)
+
     def __repr__(self):
         return "Node :\n\tID : {}\n\tPoisoned : {}\n\tCoord : {}\n\
-        Edges : {}\n".format(self.id_node, self.poisoned, self.coord, self.edges)
+        Edges : {}\n".format(self.id_node, self.poisoned, self.coord, self.edges, self.coaccess)
 
     def __del__(self):
         pass
@@ -98,12 +108,35 @@ def delete_node(nodes, id_node_to_delete):
         id_node_to_delete {str} -- The id of the node to delete
     """
     accessible_nodes = __append_accessible_node(nodes, [id_node_to_delete])
+    coaccess_nodes = __append_coaccess_node(nodes, [id_node_to_delete])
     for id_node in accessible_nodes:
         del nodes[str(id_node)]
     for node in nodes.values():
         for id_node in accessible_nodes:
-            if id_node in node.edges:
+            try:
                 node.edges.remove(id_node)
+            except Exception as e:
+                pass
+            
+        for id_node in coaccess_nodes:
+            try:
+                node.coaccess.remove(id_node)
+            except Exception as e:
+                pass
+
+def safe_nodes(nodes):
+    """Get the nodes dict and return a list of the safe nodes
+    
+    Arguments:
+        nodes {Dict} -- The node's dictionary
+    """
+    safe = list()
+
+    for node in nodes.values() :
+        if __is_safe([node.id_node], nodes) :
+            safe.append(node.id_node)
+
+    return safe
 
 def __append_accessible_node(nodes, id_nodes):
     """Append to the list id_nodes all node to delete
@@ -123,6 +156,44 @@ def __append_accessible_node(nodes, id_nodes):
                 __append_accessible_node(nodes, id_nodes)
     return id_nodes
 
+def __append_coaccess_node(nodes, id_nodes):
+    """Append to the list id_nodes all node to delete
+    Recursive function
+    
+    Arguments:
+        nodes {Dict} -- The node's dictionary
+        id_nodes {int} -- The id to the node of delete
+    
+    Returns:
+        List -- List of node id to delete
+    """
+    for id_node in id_nodes:
+        for edge in nodes[str(id_node)].coaccess:
+            if edge not in id_nodes:
+                id_nodes.append(edge)
+                __append_coaccess_node(nodes, id_nodes)
+    return id_nodes
+
+def __is_safe(id_nodes, nodes):
+    """Tests if the node is safe based on the nodes' dict
+    
+    Arguments:
+        node -- The node object concerned
+        nodes {Dict} -- The node's dictionary
+    
+    Returns:
+        Bool -- True if safe, False the other way
+    """
+    for id_node in id_nodes:
+        if nodes[id_node].poisoned :
+            return False
+        for edge in nodes[id_node].edges :
+            if edge not in id_nodes :
+                id_nodes.append(edge)
+                if not __is_safe(id_nodes, nodes) :
+                    return False
+    return True
+
 def initialize_edges(nodes, arrows):
     """Analyze arrows id for create edges
     for each nodes
@@ -133,3 +204,4 @@ def initialize_edges(nodes, arrows):
     """
     for arrow in arrows:
         nodes[arrow.id_arrow[0]].set_edges(arrow.id_arrow[1])
+        nodes[arrow.id_arrow[1]].set_coaccess(arrow.id_arrow[0])

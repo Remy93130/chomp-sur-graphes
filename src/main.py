@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf8 -*-
+
 """The main file for execute the project"""
 
 # Global variables ------------------------------------------------------------

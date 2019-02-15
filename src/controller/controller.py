@@ -5,9 +5,10 @@
 # Global variables ------------------------------------------------------------
 
 global height
-height = 700
 global width
-width =  700
+
+height = 805
+width = 805
 
 # Imports ---------------------------------------------------------------------
 
@@ -18,6 +19,7 @@ from entity.timer import *
 from entity.game import *
 import random
 import time
+import IA
 
 # Classes ---------------------------------------------------------------------
 
@@ -85,7 +87,7 @@ def launchGameIA(gui):
     """ This function launch a party vs IA"""
     gui.actual = "gameIA"
     gui.canvas.delete("all")
-    graph = Parser(height, "1.gv.svg")
+    graph = Parser(height, "3.svg")
     gui.setGraphDimensions(graph.graph_width,graph.graph_height)
     gui.setNodes(graph.get_nodes())
     gui.setArrows(graph.get_arrows())
@@ -99,6 +101,7 @@ def launchGameIA(gui):
     gui.drawTimeRest(game.turn)
     condition = Condition(gui,timer,timer,game)
     condition.loop() # launch condition for tkinter loop
+
     for node in gui.nodes.values():
         def auxDelNode(evt, node = node, game = game, condition = condition):
             delete_node(gui.nodes, node.id_node)
@@ -112,10 +115,10 @@ def launchGameIA(gui):
             gui.hideTimer("hider")
             condition.timer1.pause()
             gui.canvas.update()
-            time.sleep(3) #We leave 1 second for the player to view his screen 
+            time.sleep(0) #We leave 1 second for the player to view his screen 
             if(game.turn == 2): 
                 gui.canvas.delete("hider")
-                delete_node(gui.nodes,random.choice(list(gui.nodes.keys()))) # IA delete at random 
+                delete_node(gui.nodes, IA.chooseNode(gui.nodes)) # IA delete
                 if(noMorePoisonedNodes(gui.nodes)): # if there are no more poisoned, loose
                     return loose(gui,game.turn)
                 game.play()
@@ -146,17 +149,22 @@ def launchGame(gui):
     condition = Condition(gui,timer1,timer2,game)
     condition.loop() # launch condition for tkinter loop
     for node in gui.nodes.values():
-        def auxDelNode(evt, node = node, game = game):
-            delete_node(gui.nodes, node.id_node)
-            if(noMorePoisonedNodes(gui.nodes)):
-                return loose(gui,game.turn)
-            game.play()
-            gui.canvas.delete("graph")
-            gui.drawArrows()
-            gui.drawNodes()
-            gui.drawTurn(game)
-            gui.drawTimeRest(game.turn)
+        def auxDelNode(evt, gui = gui, node = node, game = game):
+            delNode(gui, node, game)
+            
         gui.canvas.tag_bind("_"+node.id_node+"_",'<Button-1>', auxDelNode) # define all event
+
+
+def delNode(gui, node, game) :
+    delete_node(gui.nodes, node.id_node)
+    if(noMorePoisonedNodes(gui.nodes)):
+        return loose(gui,game.turn)
+    game.play()
+    gui.canvas.delete("graph")
+    gui.drawArrows()
+    gui.drawNodes()
+    gui.drawTurn(game)
+    gui.drawTimeRest(game.turn)
 
 def launchMenu(gui):
 	""" This function launch the menu of the game"""
