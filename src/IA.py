@@ -7,21 +7,27 @@ from entity.parser import *
 
 import copy
 
-def chooseNode(nodes) :
-	poisoned = getPoisoned(nodes)
-	dictionnaire = dict()
-	x = copy.deepcopy(nodes)
-	for node in x.values() :
-		temp = copy.deepcopy(x)
-		delete_node(temp, node.id_node)
-		dictionnaire[node.id_node] = evaluatePosition(temp, 100)
-	print(dictionnaire)
+TIME = 30
+DEEP = 3
 
-	maxx = list(dictionnaire.keys())[0]
-	for i in dictionnaire.keys() :
-		if dictionnaire[i] > dictionnaire[maxx] :
-			maxx = i
-	return maxx
+def chooseNode(nodes) :
+
+	return minmax(nodes, True, DEEP)
+
+	# poisoned = getPoisoned(nodes)
+	# dictionnaire = dict()
+	# x = copy.deepcopy(nodes)
+	# for node in x.values() :
+	# 	temp = copy.deepcopy(x)
+	# 	delete_node(temp, node.id_node)
+	# 	dictionnaire[node.id_node] = evaluatePosition(temp, 100)
+	# print(dictionnaire)
+
+	# maxx = list(dictionnaire.keys())[0]
+	# for i in dictionnaire.keys() :
+	# 	if dictionnaire[i] > dictionnaire[maxx] :
+	# 		maxx = i
+	# return maxx
 
 def getPoisoned(nodes) :
 	for node in nodes.values() :
@@ -57,6 +63,58 @@ def safeIfPossible(nodes) :
 		return list(nodes.keys())[0]
 
 	return random.choice(safe)
+
+def minmax(nodes, player, deep) :
+	if (deep == 0) :
+		if player :
+			return 1 - evaluatePosition(nodes, TIME)
+		else :
+			return evaluatePosition(nodes, TIME)
+
+	d = dict()
+
+	# if deep == DEEP :
+	# 	print("Beginning :\n")
+		
+	temp = copy.deepcopy(nodes)
+	for node in nodes.keys() :
+		if (delete_node(temp, node)) :
+			if player :
+				d[node] = 0
+			else :
+				d[node] = 1
+		else :
+			d[node] = minmax(temp, not player, deep-1)
+		temp = copy.deepcopy(nodes)
+
+	# print("Step "+str(deep)+" got dict : ")
+	# print(d)
+	i = 0
+
+	if player :
+		i = maxPos(d)
+	else :
+		i = minPos(d)
+
+	# print("min/max : "+str(d[i])+" from node "+str(i))
+	if deep == DEEP :
+		return i
+	return d[i]
+
+def maxPos(dic) :
+	i = list(dic.keys())[0]
+	for _id in dic.keys() :
+		if dic[_id] > dic[i] :
+			i = _id
+	return i
+
+def minPos(dic) :
+	i = list(dic.keys())[0]
+	for _id in dic.keys() :
+		if dic[_id] < dic[i] :
+			i = _id
+	return i
+
 
 if __name__ == "__main__" :
 	graph = Parser(700, "2.svg")

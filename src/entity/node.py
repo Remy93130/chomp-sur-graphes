@@ -107,9 +107,11 @@ def delete_node(nodes, id_node_to_delete):
         nodes {Dict} -- The node's dictionary
         id_node_to_delete {str} -- The id of the node to delete
     """
+    gotPoisoned = False
     accessible_nodes = __append_accessible_node(nodes, [id_node_to_delete])
-    coaccess_nodes = __append_coaccess_node(nodes, [id_node_to_delete])
     for id_node in accessible_nodes:
+        if nodes[str(id_node)].poisoned :
+            gotPoisoned = True
         del nodes[str(id_node)]
     for node in nodes.values():
         for id_node in accessible_nodes:
@@ -117,16 +119,7 @@ def delete_node(nodes, id_node_to_delete):
                 node.edges.remove(id_node)
             except Exception as e:
                 pass
-            
-        for id_node in coaccess_nodes:
-            try:
-                node.coaccess.remove(id_node)
-            except Exception as e:
-                pass
-    for node in accessible_nodes:
-        if node.poisoned:
-            return True
-    return False
+    return gotPoisoned
 
 def safe_nodes(nodes):
     """Get the nodes dict and return a list of the safe nodes
@@ -160,24 +153,6 @@ def __append_accessible_node(nodes, id_nodes):
                 __append_accessible_node(nodes, id_nodes)
     return id_nodes
 
-def __append_coaccess_node(nodes, id_nodes):
-    """Append to the list id_nodes all node to delete
-    Recursive function
-    
-    Arguments:
-        nodes {Dict} -- The node's dictionary
-        id_nodes {int} -- The id to the node of delete
-    
-    Returns:
-        List -- List of node id to delete
-    """
-    for id_node in id_nodes:
-        for edge in nodes[str(id_node)].coaccess:
-            if edge not in id_nodes:
-                id_nodes.append(edge)
-                __append_coaccess_node(nodes, id_nodes)
-    return id_nodes
-
 def __is_safe(id_nodes, nodes):
     """Tests if the node is safe based on the nodes' dict
     
@@ -208,4 +183,3 @@ def initialize_edges(nodes, arrows):
     """
     for arrow in arrows:
         nodes[arrow.id_arrow[0]].set_edges(arrow.id_arrow[1])
-        nodes[arrow.id_arrow[1]].set_coaccess(arrow.id_arrow[0])
