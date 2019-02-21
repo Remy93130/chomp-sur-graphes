@@ -123,6 +123,10 @@ def delete_node(nodes, id_node_to_delete):
                 node.coaccess.remove(id_node)
             except Exception as e:
                 pass
+    for node in accessible_nodes:
+        if node.poisoned:
+            return True
+    return False
 
 def safe_nodes(nodes):
     """Get the nodes dict and return a list of the safe nodes
