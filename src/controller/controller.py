@@ -87,7 +87,7 @@ def launchGameIA(gui):
     """ This function launch a party vs IA"""
     gui.actual = "gameIA"
     gui.canvas.delete("all")
-    graph = Parser(height, "3.svg")
+    graph = Parser(height, "1.gv.svg")
     gui.setGraphDimensions(graph.graph_width,graph.graph_height)
     gui.setNodes(graph.get_nodes())
     gui.setArrows(graph.get_arrows())
