@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-#-*- coding: utf-8 -*
+# -*- coding: utf-8 -*
 """[summary]
 
 [description]
@@ -8,9 +8,11 @@
 import random
 from graphviz import Digraph, render
 
+
 class AutomatedNode:
     """Class for create nodes by a generated graph
     """
+
     def __init__(self, id_node, edge_in, edge_out):
         self.id_node = id_node
         self.edge_in = edge_in
@@ -25,12 +27,14 @@ class AutomatedNode:
     def __repr__(self):
         return "Generated node:\n\tId: {}\n\tEin: {}\n\tEout: {}".format(
             self.id_node, self.edge_in, self.edge_out
-            )
+        )
+
 
 class AutomatedGraph:
     """Class for create a graph randomly generated
     Expect work with AutomatedNode.
     """
+
     def __init__(self, node_max, edge_min, edge_max):
         self.node_max = node_max
         self.edge_min = edge_min
@@ -80,12 +84,14 @@ class AutomatedGraph:
     def __repr__(self):
         return "Generated graph:\n\tMax: {}\n\tEmin: {}\n\tEmax: {}".format(
             self.node_max, self.edge_min, self.edge_max
-            )
+        )
+
 
 def main():
     """Just a random main"""
     graph = AutomatedGraph(20, 0, 2)
     graph.display_graph()
+
 
 if __name__ == '__main__':
     main()

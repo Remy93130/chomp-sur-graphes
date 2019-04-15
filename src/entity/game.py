@@ -10,19 +10,17 @@ import sys
 from threading import Event
 from .timer import Timer
 
+
 # Classes ---------------------------------------------------------------------
 
 class Game:
-	"""Class for the game count turn number and other"""
-	def __init__(self):
-		self.turn = 1
-		self.end_of_thread = Event()
+    """Class for the game count turn number and other"""
 
-	def play(self):
-		self.turn = (self.turn % 2) + 1
+    def __init__(self):
+        self.turn = 1
+        self.end_of_thread = Event()
 
-
-		
+    def play(self):
+        self.turn = (self.turn % 2) + 1
 
 # Functions -------------------------------------------------------------------
-
