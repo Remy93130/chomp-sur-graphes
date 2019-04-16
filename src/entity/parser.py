@@ -12,13 +12,11 @@ import random
 import xml.etree.ElementTree as ET
 from .node import Node, Arrow
 
-
 # Classes ---------------------------------------------------------------------
 
 class Parser:
     """Class for get node's and arrow's coordinates
     Also give the minimum size for the canvas"""
-
     def __init__(self, window, path=None):
         self.__select_file(path)
         self.parser = ET.parse(self.path)
@@ -27,6 +25,8 @@ class Parser:
         self.graph_width = self.root.attrib['width'].replace('pt', '')
         self.graph_height = self.root.attrib['height'].replace('pt', '')
 
+	
+	
     def get_nodes(self):
         """Return all nodes in the svg file"""
         nodes = list()
@@ -53,6 +53,7 @@ class Parser:
         for child in self.root[0]:
             if 'edge' in child.attrib.values():
                 current_points_line = list()
+                current_points_sting = list()
                 for element in child:
                     if 'title' in element.tag:
                         current_name = tuple(element.text.split("->"))
@@ -88,14 +89,13 @@ class Parser:
             if float(value) < 0:
                 sting[i] = self.window_size - (-1 * float(value))
 
-    @staticmethod
-    def __create_dico(nodes):
+    def __create_dico(self, nodes):
         """Convert the nodes list to a dictionary for improve the
         complexity of the program
-
+        
         Arguments:
             nodes {List} -- The list to convert
-
+        
         Returns:
             Dict -- The dictionary
         """
@@ -112,6 +112,7 @@ class Parser:
             file {string} -- the name of the file
         """
         files = os.listdir(GRAPH_PATH)
+        selected = str()
         if not file:
             selected = GRAPH_PATH + random.choice(files)
         else:

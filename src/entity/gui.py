@@ -10,12 +10,10 @@ ICON_PATH = "./ressources/images/ico.png"
 from tkinter import Tk, Canvas, PhotoImage
 from time import sleep
 
-
 # Classes ---------------------------------------------------------------------
 
 class GUI:
     """docstring for GUI"""
-
     def __init__(self, root):
         self.root = root
         self.root.resizable(False, False)
@@ -30,7 +28,6 @@ class GUI:
         coord = event.x, event.y
         # Do something
 
-
 def main():
     """Main for test the class"""
     global ICON_PATH
@@ -38,7 +35,6 @@ def main():
     root = Tk()
     GUI(root)
     root.mainloop()
-
 
 if __name__ == '__main__':
     main()

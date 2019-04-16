@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# -*- coding: utf-8 -*
+#-*- coding: utf-8 -*
 """[summary]
 
 [description]
@@ -10,13 +10,11 @@ GRAPH_FOLDER = "../ressources/graphes/"
 import os
 import pickle
 
-
 def save_graph(new_name="", graph_name="Digraph.gv"):
     if not new_name:
         new_name = __get_graph_name()
     os.rename("./" + graph_name, GRAPH_FOLDER + new_name)
     os.remove(graph_name)
-
 
 def __get_graph_name():
     """Function for generate a graph name if no one is given
@@ -29,7 +27,6 @@ def __get_graph_name():
     """
     all_graphs = os.listdir(GRAPH_FOLDER)
     return str(len(all_graphs) + 1)
-
 
 def serialize_graph(graph_path):
     """Parse the graph and serialize this one
