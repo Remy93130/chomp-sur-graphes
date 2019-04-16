@@ -8,11 +8,13 @@ from entity.parser import *
 import copy
 
 TIME = 30
-DEEP = 3
+DEEP = 4
+alpha = -1000000
+beta = 10000000
 
 def chooseNode(nodes) :
 
-	return minmax(nodes, True, DEEP)
+	return alphabeta_init(nodes, True, DEEP)
 
 	# poisoned = getPoisoned(nodes)
 	# dictionnaire = dict()
@@ -100,6 +102,57 @@ def minmax(nodes, player, deep) :
 	if deep == DEEP :
 		return i
 	return d[i]
+
+def alphabeta_init(nodes, player, deep) :
+	d = dict();
+	for node in nodes :
+		alpha = -10000000
+		beta = 10000000
+		d[node] = alphabeta(nodes, player, deep, alpha, beta, node)
+	print(d)
+	maxi = -10000
+	for key, value in d.items():
+		if value > maxi :
+			maxi = value;
+			i = key;
+	return i; #Best move
+
+def alphabeta(nodes, player, deep, alpha, beta, node):
+
+	if (deep == 0) : #if it's a leaf
+		if player :
+			return 1 - evaluatePosition(nodes, TIME)
+		else :
+			return evaluatePosition(nodes, TIME)
+
+	temp = copy.deepcopy(nodes)
+	if (delete_node(temp, node)) : #if it's game over
+		if player :
+			v = 0
+		else :
+			v = 1
+	else :
+		if player:
+			v = 100000
+		else : 
+			v = -100000
+
+
+	if player :
+		for fils in nodes[node].edges :		
+			v = min(v, alphabeta(nodes, not player, deep-1, alpha, beta, node));
+			if alpha >= v :
+				return v;
+			beta = min(beta, v)
+	else : 
+		for fils in nodes[node].edges :
+			v = max(v, alphabeta(nodes, not player, deep-1, alpha, beta, node));
+			if v>= beta :
+				return v;
+			alpha = max(alpha, v);
+	return v;
+
+		
 
 def maxPos(dic) :
 	i = list(dic.keys())[0]
