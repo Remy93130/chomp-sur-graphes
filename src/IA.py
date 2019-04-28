@@ -7,10 +7,9 @@ from entity.parser import *
 
 import copy
 
+Inf= 10000000
 TIME = 30
 DEEP = 4
-alpha = -1000000
-beta = 10000000
 
 def chooseNode(nodes) :
 
@@ -106,20 +105,14 @@ def minmax(nodes, player, deep) :
 def alphabeta_init(nodes, player, deep) :
 	d = dict();
 	for node in nodes :
-		alpha = -10000000
-		beta = 10000000
+		alpha = -Inf
+		beta = Inf
 		d[node] = alphabeta(nodes, player, deep, alpha, beta, node)
-	print(d)
-	maxi = -10000
-	for key, value in d.items():
-		if value > maxi :
-			maxi = value;
-			i = key;
-	return i; #Best move
+	return maxPos(d); #Best move
 
 def alphabeta(nodes, player, deep, alpha, beta, node):
 
-	if (deep == 0) : #if it's a leaf
+	if (deep == 0) :
 		if player :
 			return 1 - evaluatePosition(nodes, TIME)
 		else :
@@ -128,23 +121,20 @@ def alphabeta(nodes, player, deep, alpha, beta, node):
 	temp = copy.deepcopy(nodes)
 	if (delete_node(temp, node)) : #if it's game over
 		if player :
-			v = 0
+			return 0;
 		else :
-			v = 1
-	else :
-		if player:
-			v = 100000
-		else : 
-			v = -100000
+			return 1;
 
 
-	if player :
+	if  not player :
+		v = Inf
 		for fils in nodes[node].edges :		
 			v = min(v, alphabeta(nodes, not player, deep-1, alpha, beta, node));
 			if alpha >= v :
 				return v;
 			beta = min(beta, v)
 	else : 
+		v = -Inf
 		for fils in nodes[node].edges :
 			v = max(v, alphabeta(nodes, not player, deep-1, alpha, beta, node));
 			if v>= beta :
