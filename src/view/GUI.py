@@ -132,12 +132,12 @@ class GUI:
 		self.canvas.create_text(self.width*0.50, self.height*0.12, text="Options",tag="optionTitle",font=titleFont)
 		self.canvas.create_rectangle(self.height*0.016,self.height*0.016,self.height*0.116,self.height*0.072,tag="returnM",fill="white",activefill="grey")
 		self.canvas.create_text(self.height*0.064,self.height*0.044,text="Menu",activefill="grey",font=describeFont,tag="returnM")
-		self.canvas.create_text(self.width*0.69,self.height*0.32,text="Difficulté:",font=describeFont,tag="difficulty")
-		self.canvas.create_window(self.width*0.69,self.height*0.36,window=gameplay)
+		#self.canvas.create_text(self.width*0.69,self.height*0.32,text="Difficulté:",font=describeFont,tag="difficulty")
+		#self.canvas.create_window(self.width*0.69,self.height*0.36,window=gameplay)
 		self.canvas.create_text(self.width*0.69,self.height*0.42,text="Couleur du noeud empoisonné:",font=describeFont,tag="colorPoison")
 		self.canvas.create_window(self.width*0.69,self.height*0.46,window=colorPoison)
-		self.canvas.create_text(self.width*0.69,self.height*0.52,text="Afficher les timers des joueurs\nsimultanément:",font=describeFont,tag="timerOption")
-		self.canvas.create_window(self.width*0.69,self.height*0.56,window=timerOption)
+		#self.canvas.create_text(self.width*0.69,self.height*0.52,text="Afficher les timers des joueurs\nsimultanément:",font=describeFont,tag="timerOption")
+		#self.canvas.create_window(self.width*0.69,self.height*0.56,window=timerOption)
 		self.canvas.create_rectangle(self.width*0.149, self.height*0.322, self.width*0.347,self.height*0.416,outline='black',fill='white',activefill='grey',width=1,tag=('randomCrea','buttonChoice'))
 		self.canvas.create_rectangle(self.width*0.149, self.height*0.5, self.width*0.347,self.height*0.602,outline='black',fill='white',activefill='grey',width=1,tag=('manualCrea','buttonChoice'))
 		self.canvas.create_text(self.width*0.248,self.height*0.360,text="Création automatique\nde graphe",activefill="grey",font=ariaRespon,tag="randomCrea")
@@ -187,7 +187,14 @@ class GUI:
 		self.canvas.create_rectangle(self.height*0.016,self.height*0.016,self.height*0.116,self.height*0.072,tag="returnO",fill="white",activefill="grey")
 		self.canvas.create_text(self.height*0.064,self.height*0.044,text="Options",activefill="grey",font=describeFont,tag="returnO")
 		
-		
+	def drawCredit(self):
+		titleFont = tkFont.Font(family='Arial', size=int(self.height*0.0442), weight='bold')
+		ariaRespon = tkFont.Font(family='Arial', size=int(self.height*0.0142), weight='bold')
+		self.canvas.create_text(self.width*0.50, self.height*0.12, text="© Léo Chardon",tag="leo",font=titleFont,activefill="lightblue")
+		self.canvas.create_text(self.width*0.50, self.height*0.22, text="© Remy Barberet",tag="remy",font=titleFont,activefill="lightblue")
+		self.canvas.create_text(self.width*0.50, self.height*0.32, text="© Melissa Buczko",tag="mel",font=titleFont,activefill="lightblue")
+		self.canvas.create_text(self.width*0.50, self.height*0.42, text="© Armand Colin",tag="armand",font=titleFont,activefill="lightblue")
+		self.canvas.create_text(self.width*0.50, self.height*0.52, text="Projet tuteuré par Monsieur Samuele Giraudo\ndans le cadre d'un DUT Informatique 2nd année à l'UPEM",tag="optionTitle",font=ariaRespon)
 		
 	def showDescription(self,text):
 		self.canvas.itemconfigure("winDescription",text=text)
