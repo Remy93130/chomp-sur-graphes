@@ -18,6 +18,8 @@ class GUI:
 		self.graph_width = None
 		self.actual = ""
 		self.timerFont = tkFont.Font(family='Arial', size=int(self.height*0.0200))
+		self.option = None
+		
 	
 	def setArrows(self,arrows):
 		for arrow in arrows:
@@ -45,7 +47,7 @@ class GUI:
 			self.graph_height = self.height*0.75
 
 	def drawLoose(self,player):
-		looseFont = tkFont.Font(family='Arial', size=int(self.height*0.0400), weight='bold')
+		looseFont = tkFont.Font(family='Arial', size=int(self.height*0.0200), weight='bold')
 		ariaRespon = tkFont.Font(family='Arial', size=int(self.height*0.0142), weight='bold')
 		if(self.actual == "gameIA" and player == 2):
 			self.canvas.create_text(self.width*0.50, self.height*0.12, text="Vous avez gagné ! :)",tag="title",font=looseFont)
@@ -65,7 +67,7 @@ class GUI:
 	
 	def drawNode(self,node):
 		if node.poisoned:
-			color = 'lightblue'
+			color = self.option.colorPoison
 		else:
 			color = 'white'
 		self.canvas.create_oval(node.coord[0]*(self.graph_width/self.ogw)-27+self.width/2-self.graph_width*0.49, self.height-node.coord[1]*(self.graph_height/self.ogh)-18-(self.height-self.graph_height-self.height*0.166), node.coord[0]*(self.graph_width/self.ogw)+27+self.width/2-self.graph_width*0.49,self.height-node.coord[1]*(self.graph_height/self.ogh)+18-(self.height-self.graph_height-self.height*0.166),tag=("_"+node.id_node+"_","graph"),fill=color,width=1.5)
@@ -136,10 +138,10 @@ class GUI:
 		self.canvas.create_window(self.width*0.69,self.height*0.46,window=colorPoison)
 		self.canvas.create_text(self.width*0.69,self.height*0.52,text="Afficher les timers des joueurs\nsimultanément:",font=describeFont,tag="timerOption")
 		self.canvas.create_window(self.width*0.69,self.height*0.56,window=timerOption)
-		self.canvas.create_rectangle(120, 260, 280,335,outline='black',fill='white',activefill='grey',width=1,tag=('randomCrea','buttonChoice'))
-		self.canvas.create_rectangle(120, 410, 280,485,outline='black',fill='white',activefill='grey',width=1,tag=('manualCrea','buttonChoice'))
-		self.canvas.create_text(200,300,text="Création automatique\nde graphe",activefill="grey",font=ariaRespon,tag="randomCrea")
-		self.canvas.create_text(200,450,text="Création manuelle\nde graphe",activefill="grey",font=ariaRespon,tag="manualCrea")
+		self.canvas.create_rectangle(self.width*0.149, self.height*0.322, self.width*0.347,self.height*0.416,outline='black',fill='white',activefill='grey',width=1,tag=('randomCrea','buttonChoice'))
+		self.canvas.create_rectangle(self.width*0.149, self.height*0.5, self.width*0.347,self.height*0.602,outline='black',fill='white',activefill='grey',width=1,tag=('manualCrea','buttonChoice'))
+		self.canvas.create_text(self.width*0.248,self.height*0.360,text="Création automatique\nde graphe",activefill="grey",font=ariaRespon,tag="randomCrea")
+		self.canvas.create_text(self.width*0.248,self.height*0.559,text="Création manuelle\nde graphe",activefill="grey",font=ariaRespon,tag="manualCrea")
 	
 	def drawRandomCrea(self,maxNodes,minArrows,maxArrows):
 		titleFont = tkFont.Font(family='Arial', size=int(self.height*0.0442), weight='bold')
@@ -148,16 +150,16 @@ class GUI:
 		self.canvas.create_rectangle(self.height*0.016,self.height*0.016,self.height*0.116,self.height*0.072,tag="returnO",fill="white",activefill="grey")
 		self.canvas.create_text(self.height*0.064,self.height*0.044,text="Options",activefill="grey",font=describeFont,tag="returnO")
 		self.canvas.create_text(self.width*0.50, self.height*0.12, text="Création automatique de graphe",tag="optionTitle",font=titleFont)
-		self.canvas.create_text(400,180,text="Nombre de sommets souhaités:",font=describeFont,tag="maxNodes")
-		self.canvas.create_text(400,250,text="Nombre de liaisons minimum par sommet souhaités:",font=describeFont,tag="minArr")
-		self.canvas.create_text(400,320,text="Nombre de liaisons maximum par sommet:",font=describeFont,tag="maxArr")
-		self.canvas.create_window(400,210,window=maxNodes)
-		self.canvas.create_window(400,280,window=minArrows)
-		self.canvas.create_window(400,350,window=maxArrows)
-		self.canvas.create_rectangle(345, 415, 465,470,outline='black',fill='white',activefill='grey',width=1,tag=('Show','buttonChoice'))
-		self.canvas.create_text(405,445,text="Prévisualiser",font=describeFont,tag="Show")
-		self.canvas.create_rectangle(345, 505, 465,560,outline='black',fill='white',activefill='grey',width=1,tag=('Save','buttonChoice'))
-		self.canvas.create_text(405,535,text="Sauvegarder",font=describeFont,tag="Save")
+		self.canvas.create_text(self.width*0.496,self.height*0.223,text="Nombre de sommets souhaités:",font=describeFont,tag="maxNodes")
+		self.canvas.create_text(self.width*0.496,self.height*0.310,text="Nombre de liaisons minimum par sommet souhaités:",font=describeFont,tag="minArr")
+		self.canvas.create_text(self.width*0.496,self.height*0.397,text="Nombre de liaisons maximum par sommet:",font=describeFont,tag="maxArr")
+		self.canvas.create_window(self.width*0.496,self.height*0.26,window=maxNodes)
+		self.canvas.create_window(self.width*0.496,self.height*0.347,window=minArrows)
+		self.canvas.create_window(self.width*0.496,self.height*0.434,window=maxArrows)
+		self.canvas.create_rectangle(self.width*0.428, self.height*0.515, self.width*0.577,self.height*0.583,outline='black',fill='white',activefill='grey',width=1,tag=('Show','buttonChoice'))
+		self.canvas.create_text(self.width*0.5,self.height*0.552,text="Prévisualiser",font=describeFont,tag="Show")
+		self.canvas.create_rectangle(self.width*0.428, self.height*0.627, self.width*0.577,self.height*0.695,outline='black',fill='white',activefill='grey',width=1,tag=('Save','buttonChoice'))
+		self.canvas.create_text(self.width*0.5,self.height*0.664,text="Sauvegarder",font=describeFont,tag="Save")
 		
 	def drawChooseGraphe(self,graphList):
 		titleFont = tkFont.Font(family='Arial', size=int(self.height*0.0442), weight='bold')
@@ -166,22 +168,22 @@ class GUI:
 		self.canvas.create_rectangle(self.height*0.016,self.height*0.016,self.height*0.116,self.height*0.072,tag="returnM",fill="white",activefill="grey")
 		self.canvas.create_text(self.height*0.064,self.height*0.044,text="Menu",activefill="grey",font=describeFont,tag="returnM")
 		self.canvas.create_text(self.width*0.50, self.height*0.12, text="Choississez votre graphe",tag="chooseTitle",font=titleFont)
-		self.canvas.create_window(400,300,window=graphList)
-		self.canvas.create_rectangle(710,740,790,785,tag="play",fill="white",activefill="grey")
-		self.canvas.create_text(750,760,text="Jouer",activefill="grey",font=describeFont,tag="play")
-		self.canvas.create_rectangle(340,420,460,470,tag="visual",fill="white",activefill="grey")
-		self.canvas.create_text(400,440,text="Visualiser",activefill="grey",font=describeFont,tag="visual")
+		self.canvas.create_window(self.width*0.496,self.height*0.372,window=graphList)
+		self.canvas.create_rectangle(self.width*0.881,self.height*0.919,self.width*0.981,self.height*0.975,tag="play",fill="white",activefill="grey")
+		self.canvas.create_text(self.width*0.931,self.height*0.944,text="Jouer",activefill="grey",font=describeFont,tag="play")
+		self.canvas.create_rectangle(self.width*0.422,self.height*0.521,self.width*0.571,self.height*0.583,tag="visual",fill="white",activefill="grey")
+		self.canvas.create_text(self.width*0.496,self.height*0.546,text="Visualiser",activefill="grey",font=describeFont,tag="visual")
 		
 	def drawManualCrea(self,text):
 		titleFont = tkFont.Font(family='Arial', size=int(self.height*0.0442), weight='bold')
 		describeFont = tkFont.Font(family='Arial', size=int(self.width*0.0165))
 		ariaRespon = tkFont.Font(family='Arial', size=int(self.height*0.0142), weight='bold')
 		self.canvas.create_text(self.width*0.50, self.height*0.12, text="Création Manuelle de graphe",tag="optionTitle",font=titleFont)
-		self.canvas.create_window(400,360,window=text)
-		self.canvas.create_rectangle(710,740,790,785,tag="Save",fill="white",activefill="grey")
-		self.canvas.create_text(750,760,text="sauver",activefill="grey",font=describeFont,tag="Save")
-		self.canvas.create_rectangle(550,740,660,785,tag="Show",fill="white",activefill="grey")
-		self.canvas.create_text(605,760,text="prévisualiser",activefill="grey",font=describeFont,tag="Show")
+		self.canvas.create_window(self.width*0.496,self.height*0.447,window=text)
+		self.canvas.create_rectangle(self.width*0.881,self.height*0.919,self.width*0.981,self.height*0.975,tag="Save",fill="white",activefill="grey")
+		self.canvas.create_text(self.width*0.931,self.height*0.944,text="sauver",activefill="grey",font=describeFont,tag="Save")
+		self.canvas.create_rectangle(self.width*0.683,self.height*0.919,self.width*0.819,self.height*0.975,tag="Show",fill="white",activefill="grey")
+		self.canvas.create_text(self.width*0.751,self.height*0.944,text="prévisualiser",activefill="grey",font=describeFont,tag="Show")
 		self.canvas.create_rectangle(self.height*0.016,self.height*0.016,self.height*0.116,self.height*0.072,tag="returnO",fill="white",activefill="grey")
 		self.canvas.create_text(self.height*0.064,self.height*0.044,text="Options",activefill="grey",font=describeFont,tag="returnO")
 		
