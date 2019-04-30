@@ -17,7 +17,13 @@ Python 3
 
 ## Execution du programme
 
-Pour executer le programme se rendre dans le repertoire du projet et executer la commande suivante : 
+Pour executer le programme se rendre dans le repertoire du projet et executer les commandes suivantes : 
 ```
-python3 src/main.py
+cd src
+python3 main.py
+
+Si windows:
+cd src
+python main.py
+
 ```
