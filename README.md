@@ -22,7 +22,10 @@ Pour executer le programme se rendre dans le repertoire du projet et executer le
 cd src
 python3 main.py
 
-Si windows:
+```
+Si Windows:
+
+```
 cd src
 python main.py
 
