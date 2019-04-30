@@ -209,9 +209,9 @@ def launchGameManualCrea(gui):
 	gui.canvas.delete("all")
 	text = Text(gui.screen,width=50,height=20)
 	rules = "Bienvenue sur le créateur manuel \
-de graphes!!!\nici vous pouvez indiquer quels sont \
+de graphe!!!\nici vous pouvez indiquer quels sont \
 les noeuds\nque vous voulez en séparant chaque numéro\n\
-par du texte, si vous voulez un empoisonné\nalors tapez 'p' après le numéro\nune fois ceci fait, finissez par un point virgule.\n\
+par du texte, si vous en voulez un empoisonné\nalors tapez 'p' après le numéro\nune fois ceci fait, finissez par un point virgule.\n\
 Ensuite vous pouvez initialiser\nles connexions entre les noeuds\n\
 de la même manière, d'abords le predecesseur\nensuite ses successeurs\n\
 en faisant attention à les séparer par du texte.\n\
@@ -389,7 +389,7 @@ def launchMenu(gui):
 	def noDescription(evt, gui = gui):
 		gui.showDescription("")
 	def description1J(evt, gui = gui):
-		gui.showDescription("Disputez une partie\ncontre l'ordinateur,\nla difficulté dépend\nde celle choisis\ndans les options.")
+		gui.showDescription("Disputez une partie\ncontre l'ordinateur.")
 	def description2J(evt, gui = gui):
 		gui.showDescription("Disputez une partie\ncontre un joueur,\nidéal pour un duel.")
 	def descriptionOp(evt, gui = gui):
@@ -397,7 +397,7 @@ def launchMenu(gui):
 	def descriptionAb(evt, gui = gui):
 		gui.showDescription("Affichez les crédits.")
 	def descriptionRu(evt, gui = gui):
-		gui.showDescription("Affichez les règles de ce jeu.")
+		gui.showDescription("Affichez les règles du jeu.")
 	gui.canvas.tag_bind("buttonChoice",'<Leave>',noDescription)
 	gui.canvas.tag_bind("1joueur",'<Button-1>',auxGameIA)
 	gui.canvas.tag_bind("1joueur",'<Motion>',description1J)
