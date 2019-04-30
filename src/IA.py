@@ -9,11 +9,11 @@ import copy
 
 Inf= 10000000
 TIME = 30
-DEEP = 20
+DEEP = 6
 
 def chooseNode(nodes) :
 
-	return alphabeta_init(nodes, True, DEEP)
+	return alphabeta_init(nodes, True)
 
 	# poisoned = getPoisoned(nodes)
 	# dictionnaire = dict()
@@ -102,12 +102,12 @@ def minmax(nodes, player, deep) :
 		return i
 	return d[i]
 
-def alphabeta_init(nodes, player, deep) :
+def alphabeta_init(nodes, player) :
 	d = dict();
 	for node in nodes :
 		alpha = -Inf
 		beta = Inf
-		d[node] = alphabeta(nodes, player, deep, alpha, beta, node)
+		d[node] = alphabeta(nodes, player, 20, alpha, beta, node)
 	return maxPos(d) #Best move
 
 def alphabeta(nodes, player, deep, alpha, beta, node):
