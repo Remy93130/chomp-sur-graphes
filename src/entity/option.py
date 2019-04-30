@@ -12,6 +12,12 @@ import pickle
 
 # Classes ---------------------------------------------------------------------
 
+class Option:
+    def __init__(self,difficulty,colorPoison,ShowAllTimer):
+        self.difficulty = difficulty
+        self.colorPoison = colorPoison
+        self.ShowAllTimer = ShowAllTimer
+		
 # Functions -------------------------------------------------------------------
 
 def logs_output(output):

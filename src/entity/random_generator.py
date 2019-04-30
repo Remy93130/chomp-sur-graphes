@@ -34,6 +34,7 @@ class AutomatedGraph:
         self.node_max = node_max
         self.edge_min = edge_min
         self.edge_max = edge_max
+        self.generated = Digraph(format="svg", engine="sfdp")
 
     def __generate_node(self):
         """Generates nodes for prepare the display
@@ -49,14 +50,12 @@ class AutomatedGraph:
                 edge_out = self.edge_max - total_edges
             nodes[i] = AutomatedNode(i, edge_in, edge_out)
         return nodes
-
-    def display_graph(self):
-        """Create an image of the graph and display it on the user screen
-        """
-        generated = Digraph(format="svg", engine="sfdp")
+	
+    def create(self):
+        """create image of the graph"""
         nodes = self.__generate_node()
         poisoned = random.randint(0, self.node_max - 1)
-        generated.node(str(poisoned), color="lightblue", style="filled")
+        self.generated.node(str(poisoned), color="lightblue", style="filled")
         for node in nodes.values():
             edges = set()
             for _i in range(node.edge_out):
@@ -70,10 +69,15 @@ class AutomatedGraph:
                         break
                 edges.add(next_node)
             for target in edges:
-                generated.edge(str(node.id_node), str(target))
-        generated.render()
+                self.generated.edge(str(node.id_node), str(target))
+        self.generated.render()
         render("sfdp", "svg", "Digraph.gv")
-        generated.view()
+		
+	
+    def display_graph(self):
+        """display the graph on the user screen
+        """
+        self.generated.view()
 
     def __repr__(self):
         return "Generated graph:\n\tMax: {}\n\tEmin: {}\n\tEmax: {}".format(
