@@ -21,6 +21,7 @@ from entity.game import *
 from entity.main_generator import *
 from entity.random_generator import *
 from entity.option import *
+import webbrowser
 import random
 import time
 import IA
@@ -382,7 +383,7 @@ def launchMenu(gui):
 	def auxOption(evt, gui = gui):
 		return launchOption(gui)
 	def auxAbout(evt, gui = gui):
-		return launchGame(gui)
+		return about(gui)
 	def auxRules(evt, gui = gui):
 		return launchRules(gui)
 	def noDescription(evt, gui = gui):
@@ -404,7 +405,7 @@ def launchMenu(gui):
 	gui.canvas.tag_bind("2joueur",'<Motion>',description2J)
 	gui.canvas.tag_bind("option",'<Button-1>',auxOption)
 	gui.canvas.tag_bind("option",'<Motion>',descriptionOp)
-	gui.canvas.tag_bind("about",'<Button-1>',printcoord)
+	gui.canvas.tag_bind("about",'<Button-1>',auxAbout)
 	gui.canvas.tag_bind("about",'<Motion>',descriptionAb)
 	gui.canvas.tag_bind("rules",'<Button-1>',auxRules)
 	gui.canvas.tag_bind("rules",'<Motion>',descriptionRu)
@@ -414,9 +415,22 @@ def about(gui):
 	gui.actual = "about"
 	gui.canvas.delete("all")
 	gui.drawMenuButton()
-	def auxChoose(evt,number = number,gui = gui):
-		return chooseGraphe(gui,number)
-	gui.canvas.tag_bind('returnC','<Button-1>',auxChoose)
+	gui.drawCredit()
+	def auxMenu(evt,gui = gui):
+		return launchMenu(gui)
+	def auxLinkedInLeo(evt,gui = gui):
+		webbrowser.open('https://www.linkedin.com/in/leo-chardon/')
+	def auxLinkedInRemy(evt,gui = gui):
+		webbrowser.open('https://www.linkedin.com/in/r%C3%A9my-barberet/')
+	def auxLinkedInMel(evt,gui = gui):
+		webbrowser.open('https://www.linkedin.com/in/melissabuczko/')
+	def auxLinkedInArmand(evt,gui = gui):
+		webbrowser.open('https://www.linkedin.com/in/armand-colin-a95318155/')
+	gui.canvas.tag_bind('returnC','<Button-1>',auxMenu)
+	gui.canvas.tag_bind('leo','<Button-1>',auxLinkedInLeo)
+	gui.canvas.tag_bind('remy','<Button-1>',auxLinkedInRemy)
+	gui.canvas.tag_bind('mel','<Button-1>',auxLinkedInMel)
+	gui.canvas.tag_bind('armand','<Button-1>',auxLinkedInArmand)
 
 def printcoord(evt):
     print("x: ",evt.x,"; y: ",evt.y)
