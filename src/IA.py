@@ -9,7 +9,7 @@ import copy
 
 Inf= 10000000
 TIME = 30
-DEEP = 4
+DEEP = 20
 
 def chooseNode(nodes) :
 
@@ -108,7 +108,7 @@ def alphabeta_init(nodes, player, deep) :
 		alpha = -Inf
 		beta = Inf
 		d[node] = alphabeta(nodes, player, deep, alpha, beta, node)
-	return maxPos(d); #Best move
+	return maxPos(d) #Best move
 
 def alphabeta(nodes, player, deep, alpha, beta, node):
 
@@ -121,26 +121,26 @@ def alphabeta(nodes, player, deep, alpha, beta, node):
 	temp = copy.deepcopy(nodes)
 	if (delete_node(temp, node)) : #if it's game over
 		if player :
-			return 0;
+			return 0
 		else :
-			return 1;
+			return 1
 
 
-	if  not player :
+	if player :
 		v = Inf
 		for fils in nodes[node].edges :		
-			v = min(v, alphabeta(nodes, not player, deep-1, alpha, beta, node));
+			v = min(v, alphabeta(nodes, not player, deep-1, alpha, beta, fils))
 			if alpha >= v :
-				return v;
+				return v
 			beta = min(beta, v)
 	else : 
 		v = -Inf
 		for fils in nodes[node].edges :
-			v = max(v, alphabeta(nodes, not player, deep-1, alpha, beta, node));
+			v = max(v, alphabeta(nodes, not player, deep-1, alpha, beta, fils))
 			if v>= beta :
-				return v;
-			alpha = max(alpha, v);
-	return v;
+				return v
+			alpha = max(alpha, v)
+	return v
 
 		
 
