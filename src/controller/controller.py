@@ -44,7 +44,8 @@ class Condition:
                 if(self.timer1.run() == "done"): #view if the timer1 is done, 
                     return loose(self.gui,self.game.turn)
             else:
-                self.timer1.hide()
+                if options_settings.ShowAllTimer == "non":
+                    self.timer1.hide()
                 self.timer1.pause()
             if(self.game.turn == 2):
                 self.timer2.start()
@@ -52,7 +53,8 @@ class Condition:
                 if(self.timer2.run() == "done"): #view if the timer2 is done, 
                     return loose(self.gui,self.game.turn)
             else:
-                self.timer2.hide()
+                if options_settings.ShowAllTimer == "non":
+                    self.timer2.hide()
                 self.timer2.pause()
             return self.gui.screen.after(100, self.loop)
         
@@ -106,7 +108,23 @@ def launchOption(gui):
 	timerOption = OptionMenu(gui.screen, choiceYesNo, *yesNo)
 	gui.drawOption(gameplay,colorPoison,timerOption)
 	def auxMenu(evt, gui = gui):
-		print(choiceDifficult.get())
+		options_settings.difficulty = choiceDifficult.get()
+		if choiceColor.get() == 'bleue':
+			options_settings.colorPoison = 'lightblue'
+		elif choiceColor.get() == 'rouge':
+			options_settings.colorPoison = 'red'
+		elif choiceColor.get() == 'vert':
+			options_settings.colorPoison = 'green'
+		elif choiceColor.get() == 'jaune':
+			options_settings.colorPoison = 'yellow'
+		elif choiceColor.get() == 'orange':
+			options_settings.colorPoison = 'orange'
+		elif choiceColor.get() == 'violet':
+			options_settings.colorPoison = 'purple'
+		elif choiceColor.get() == 'marron':
+			options_settings.colorPoison = 'brown'
+		options_settings.ShowAllTimer = choiceYesNo.get()
+		gui.option = options_settings
 		return launchMenu(gui)	
 	def auxRanCrea(evt, gui = gui):
 		return launchRandomCrea(gui)
@@ -246,32 +264,35 @@ def launchGameIA(gui,graphe_name):
     condition.loop() # launch condition for tkinter loop
 
     for node in gui.nodes.values():
-        def auxDelNode(evt, node = node, game = game, condition = condition):
-            delete_node(gui.nodes, node.id_node)
-            if(noMorePoisonedNodes(gui.nodes)):
-                return loose(gui,game.turn)
-            game.play()
-            gui.canvas.delete("graph")
-            gui.drawArrows()
-            gui.drawNodes()
-            gui.drawTurn(game)
-            gui.hideTimer("hider")
-            condition.timer1.pause()
-            gui.canvas.update()
-            time.sleep(0) #We leave 1 second for the player to view his screen 
-            if(game.turn == 2): 
-                gui.canvas.delete("hider")
-                delete_node(gui.nodes, IA.chooseNode(gui.nodes)) # IA delete
-                if(noMorePoisonedNodes(gui.nodes)): # if there are no more poisoned, loose
-                    return loose(gui,game.turn)
-                game.play()
-                gui.canvas.delete("graph")
-                gui.drawArrows()
-                gui.drawNodes()
-                gui.drawTurn(game)
-                gui.drawTimeRest(game.turn)
-        gui.canvas.tag_bind("_"+node.id_node+"_",'<Button-1>', auxDelNode) # define all event
+        def auxPlayTurn(evt, node = node, game = game, condition = condition):
+            playTurnIA(gui,node,game,condition)
+        gui.canvas.tag_bind("_"+node.id_node+"_",'<Button-1>', auxPlayTurn) # define all event
 
+		
+def playTurnIA(gui, node,game,condition):
+	delete_node(gui.nodes, node.id_node)
+	if(noMorePoisonedNodes(gui.nodes)):
+		return loose(gui,game.turn)
+	game.play()
+	gui.canvas.delete("graph")
+	gui.drawArrows()
+	gui.drawNodes()
+	gui.drawTurn(game)
+	gui.hideTimer("hider")
+	condition.timer1.pause()
+	gui.canvas.update()
+	time.sleep(0) #We leave 1 second for the player to view his screen 
+	if(game.turn == 2): 
+		gui.canvas.delete("hider")
+		delete_node(gui.nodes, IA.chooseNode(gui.nodes)) # IA delete
+		if(noMorePoisonedNodes(gui.nodes)): # if there are no more poisoned, loose
+			return loose(gui,game.turn)
+		game.play()
+		gui.canvas.delete("graph")
+		gui.drawArrows()
+		gui.drawNodes()
+		gui.drawTurn(game)
+		gui.drawTimeRest(game.turn)
 
 def chooseGraphe(gui,number):
 	gui.actual = "chooseGraphe"
@@ -331,13 +352,13 @@ def launchGame(gui,graphe_name):
     condition = Condition(gui,timer1,timer2,game)
     condition.loop() # launch condition for tkinter loop
     for node in gui.nodes.values():
-        def auxDelNode(evt, gui = gui, node = node, game = game):
-            delNode(gui, node, game)
+        def auxPlayTurn(evt, gui = gui, node = node, game = game):
+            playTurn(gui, node, game)
             
-        gui.canvas.tag_bind("_"+node.id_node+"_",'<Button-1>', auxDelNode) # define all event
+        gui.canvas.tag_bind("_"+node.id_node+"_",'<Button-1>', auxPlayTurn) # define all event
 
 
-def delNode(gui, node, game) :
+def playTurn(gui, node, game) :
     delete_node(gui.nodes, node.id_node)
     if(noMorePoisonedNodes(gui.nodes)):
         return loose(gui,game.turn)
@@ -403,7 +424,8 @@ def printcoord(evt):
 def controller():
 	""" This function start the tkinter interface and the home of the game"""
 	global options_settings
-	options_settings = Option("difficile","bleue","non")
-	Interface = GUI(width,height) 
+	options_settings = Option("difficile","lightblue","non")
+	Interface = GUI(width,height)
+	Interface.option = options_settings
 	launchMenu(Interface)
 	Interface.launchGUI() # This active the tkinter thread
