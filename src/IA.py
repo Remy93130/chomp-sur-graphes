@@ -107,7 +107,7 @@ def alphabeta_init(nodes, player) :
 	for node in nodes :
 		alpha = -Inf
 		beta = Inf
-		d[node] = alphabeta(nodes, player, 2, alpha, beta, node)
+		d[node] = alphabeta(nodes, player, 3, alpha, beta, node)
 	return maxPos(d) #Best move
 
 def alphabeta(nodes, player, deep, alpha, beta, node):
