@@ -121,9 +121,9 @@ def alphabeta(nodes, player, deep, alpha, beta, node):
 	temp = copy.deepcopy(nodes)
 	if (delete_node(temp, node)) : #if it's game over
 		if player :
-			return 0
+			return -5
 		else :
-			return 1
+			return 5
 
 
 	if player :
